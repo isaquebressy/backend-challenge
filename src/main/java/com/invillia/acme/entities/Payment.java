@@ -3,12 +3,13 @@ package com.invillia.acme.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -65,7 +66,8 @@ public class Payment implements Serializable {
 		this.paymentDate = paymentDate;
 	}
 
-	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "order_id")
 	public Order getOrder() {
 		return order;
 	}

@@ -13,10 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "order")
+@Table(name = "buy_order")
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = -4008300451822192725L;
@@ -28,6 +29,7 @@ public class Order implements Serializable {
 
 	private Store store;
 	private List<OrderItem> orderItems;
+	private Payment payment;
 
 	public Order() {
 	}
@@ -85,6 +87,15 @@ public class Order implements Serializable {
 
 	public void setOrderItems(List<OrderItem> orderItems) {
 		this.orderItems = orderItems;
+	}
+
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
 	}
 
 	@Override

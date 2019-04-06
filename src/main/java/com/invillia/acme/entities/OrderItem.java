@@ -9,7 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -64,8 +64,8 @@ public class OrderItem implements Serializable {
 	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
 	}
-
-	@OneToMany(fetch = FetchType.EAGER)
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	public Order getOrder() {
 		return order;
 	}
