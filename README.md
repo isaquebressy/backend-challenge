@@ -1,5 +1,16 @@
 # Invillia recruitment challenge
 
+### Notas da resolução do desafio (em português)
+> Infelizmente, não tive tempo suficiente de resolver completamente o desafio. Faltou-me um pouco de organização do tempo que eu tinha disponível e talvez uma abordagem diferente da resolução do problema (talvez uma abordagem top-down fosse melhor nesse caso).
+
+> Algumas coisas gostaria de ter modificado antes da entrega, mas infelizmente não tive como: alterar o status para um tipo `Enum`; criar um arquivo `docker-compose.yml` descrevendo os containeres para a aplicação e para o banco de dados. Acabei baixando um container aqui na minha máquina e configurando na mão mesmo; Adicionar o `spring-security` para aumentar a segurança e trabalhar com tokens `JWT`; utilizar um orquestrador, como o Kubernetes, para balancear os containers.
+
+> Algumas partes da solução precisariam ser revistas, pois não houve um entendimento muito preciso do que estava sendo pedido e acabei, por conta da abordagem escolhida, só percebendo isso mais para o final. Algumas regras como: Pode haver uma ordem sem itens, ou itens sem ordem, pode haver mais de um pagamento para uma ordem, como o reembolso é feito, etc. não ficaram claras durante o processo de desenvolvimento e acabei deixando para resolver mais para frente se houvesse tempo.
+
+> Isaque Bressy
+### Fim da nota
+
+
 [![Build Status](https://travis-ci.org/shelsonjava/invillia.svg?branch=master)](https://travis-ci.org/shelsonjava/invillia)
 
 ![Invillia Logo](https://invillia.com/public/assets/img/logo-invillia.svg)
