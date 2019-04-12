@@ -27,5 +27,4 @@ public class PaymentService {
 		log.info("Buscando pagamento da ordem de id {} ", orderId);
 		return Optional.ofNullable(this.paymentRepository.findByOrderId(orderId));
 	}
-
 }

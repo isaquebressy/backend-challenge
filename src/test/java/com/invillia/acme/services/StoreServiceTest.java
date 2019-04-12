@@ -3,6 +3,7 @@ package com.invillia.acme.services;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -13,6 +14,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -35,21 +39,32 @@ public class StoreServiceTest {
 
 	@Before
 	public void setUp() {
-		BDDMockito.given(this.storeRepository.findByName(Mockito.anyString())).willReturn(new Store());
-		BDDMockito.given(this.storeRepository.findByAddress(Mockito.anyString())).willReturn(new Store());
+		BDDMockito.given(this.storeRepository.findByName(Mockito.anyString(), Mockito.any(PageRequest.class)))
+				.willReturn(new PageImpl<Store>(new ArrayList<Store>()));
+		BDDMockito.given(this.storeRepository.findByAddress(Mockito.anyString(), Mockito.any(PageRequest.class)))
+				.willReturn(new PageImpl<Store>(new ArrayList<Store>()));
+		BDDMockito.given(this.storeRepository.findByNameAndAddress(Mockito.anyString(), Mockito.anyString()))
+				.willReturn(new Store());
 		BDDMockito.given(this.storeRepository.save(Mockito.any(Store.class))).willReturn(new Store());
 	}
 
 	@Test
 	public void testFindStoreByName() {
-		Optional<Store> store = this.storeService.findByName(STORE_NAME);
+		Page<Store> stores = this.storeService.findByName(STORE_NAME, PageRequest.of(0, 10));
 
-		assertTrue(store.isPresent());
+		assertNotNull(stores);
 	}
 
 	@Test
 	public void testFindStoreByAddress() {
-		Optional<Store> store = this.storeService.findByAddress(STORE_ADDRESS);
+		Page<Store> stores = this.storeService.findByAddress(STORE_ADDRESS, PageRequest.of(0, 10));
+
+		assertNotNull(stores);
+	}
+
+	@Test
+	public void testFindStoreByNameAndAddress() {
+		Optional<Store> store = this.storeService.findByNameAndAddress(STORE_NAME, STORE_ADDRESS);
 
 		assertTrue(store.isPresent());
 	}

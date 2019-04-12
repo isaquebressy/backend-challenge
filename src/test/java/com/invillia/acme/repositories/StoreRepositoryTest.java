@@ -1,6 +1,7 @@
 package com.invillia.acme.repositories;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.After;
@@ -44,25 +45,32 @@ public class StoreRepositoryTest {
 
 		assertEquals(STORE_NAME, store.getName());
 	}
-	
+
 	@Test
 	public void testFindByAddress() {
 		Store store = this.storeRepository.findByAddress(STORE_ADDRESS);
-		
+
 		assertEquals(STORE_ADDRESS, store.getAddress());
 	}
-	
+
+	@Test
+	public void testFindByNameAndAddress() {
+		Store store = this.storeRepository.findByNameAndAddress(STORE_NAME, STORE_ADDRESS);
+
+		assertNotNull(store);
+	}
+
 	@Test
 	public void testFindByInvalidName() {
 		Store store = this.storeRepository.findByName("Invalid Store Name");
-		
+
 		assertNull(store);
 	}
-	
+
 	@Test
 	public void testFindByInvalidAddress() {
 		Store store = this.storeRepository.findByAddress("Invalid Store Address");
-		
+
 		assertNull(store);
 	}
 
