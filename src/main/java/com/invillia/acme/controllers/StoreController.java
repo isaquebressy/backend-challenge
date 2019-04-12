@@ -12,7 +12,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +58,32 @@ public class StoreController {
 
 	}
 
+	@PutMapping("/{storeId}")
+	public ResponseEntity<Response<StoreDto>> update(@PathVariable Long storeId, @Valid @RequestBody StoreDto storeDto,
+			BindingResult result) {
+		log.info("Atualizando loja de id {}", storeId);
+		Response<StoreDto> response = new Response<>();
+
+		Optional<Store> store = this.storeService.findById(storeId);
+		if (!store.isPresent()) {
+			response.getErrors().add("Loja com o id " + storeId + " não encontrada");
+		}
+
+		Store newStore = this.convertDtoToStore(storeDto);
+		if (result.hasErrors()) {
+			log.error("Erro validando dados da loja: {}", result.getAllErrors());
+			result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
+			return ResponseEntity.badRequest().body(response);
+		}
+
+		newStore.setId(store.get().getId());
+		this.storeService.persist(newStore);
+
+		response.setData(this.convertStoreToDto(newStore));
+		return ResponseEntity.ok(response);
+
+	}
+
 	@GetMapping
 	public ResponseEntity<Response<StoreDto>> findStoreByNameAndAddress(String name, String address) {
 
@@ -63,10 +91,28 @@ public class StoreController {
 
 		Response<StoreDto> response = new Response<>();
 		Optional<Store> store = storeService.findByNameAndAddress(name, address);
-		
+
 		if (!store.isPresent()) {
 			log.info("Loja com o nome {} e endereço {} não encontrada", name, address);
 			response.getErrors().add("Loja com o nome " + name + " e endereço " + address + " não encontrada");
+			return ResponseEntity.badRequest().body(response);
+		}
+
+		response.setData(this.convertStoreToDto(store.get()));
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{storeId}")
+	public ResponseEntity<Response<StoreDto>> findStoreById(@PathVariable Long storeId) {
+
+		log.info("Buscando loja com o id {}", storeId);
+
+		Response<StoreDto> response = new Response<>();
+		Optional<Store> store = storeService.findById(storeId);
+
+		if (!store.isPresent()) {
+			log.info("Loja com o id {} não encontrada", storeId);
+			response.getErrors().add("Loja com o id " + storeId + " não encontrada");
 			return ResponseEntity.badRequest().body(response);
 		}
 

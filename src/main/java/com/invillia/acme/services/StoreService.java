@@ -35,6 +35,11 @@ public class StoreService {
 		return Optional.ofNullable(this.storeRepository.findByNameAndAddress(name, address));
 	}
 
+	public Optional<Store> findById(Long id) {
+		log.info("Buscando uma loja com o id {}", id);
+		return this.storeRepository.findById(id);
+	}
+
 	public Store persist(Store store) {
 		log.info("Persistindo loja: {}", store);
 		return this.storeRepository.save(store);
